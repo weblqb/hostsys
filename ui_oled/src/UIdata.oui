@@ -1,0 +1,39 @@
+3
+2
+3
+2
+0
+STATE
+Conditions
+0
+1
+0
+BKP
+Back up
+0
+2
+1
+TEMP
+Temperature
+temperatureBoard
+-1
+1
+ALTTD
+Altitude
+Altitude
+-1
+1
+PRSRE
+Pressure
+Pressure
+-1
+2
+TIME
+Time of last backup
+TimBkp
+-1
+2
+REMN
+remain of HDD
+REMHDD
+-1
