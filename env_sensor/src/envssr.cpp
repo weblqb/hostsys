@@ -11,8 +11,8 @@ using namespace std;
 
 BMP180 *ptrSensor;
 
-bool chatterCallback(env_sensor::DataCallBack::Request  &req,
-         env_sensor::DataCallBack::Response &res)
+bool chatterCallback(ui_oled::DataCallBack::Request  &req,
+         ui_oled::DataCallBack::Response &res)
 {
     ROS_INFO("Got a call: [%s]", req.reqcd.c_str());
 

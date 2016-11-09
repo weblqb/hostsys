@@ -185,7 +185,7 @@ void UIkeeper::ConstructUI(ifstream & file, vector<ros::ServiceClient> & vecClnt
             file >> indexDiveIn ;
             if(title.length()>5) title= title.substr(0,5); //the lenght of titles can not be longer than 5.
 			if (indexDiveIn == -1){
-				vecClnt.push_back(n.n.serviceClient<env_sensor::DataCallBack>(ReqCode.c_str()));
+				vecClnt.push_back(n.n.serviceClient<ui_oled::DataCallBack>(ReqCode.c_str()));
 				mpUIdt->AddSection(indexChain, title, Abstract, ReqCode, vecClnt.length()-1, indexDiveIn);
 			}
 			else{

@@ -104,7 +104,7 @@ string UIdatabase::getReqCode(Section *Sec)
     return Sec->strReqCode;
 }
 
-int getReqIndex(){
+int getReqIndex(Section *Sec){
 	return Sec->dReqIndex;
 }
 

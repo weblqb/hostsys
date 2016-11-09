@@ -21,7 +21,7 @@ vector<ros::ServiceClient> vecClnt;
 ros::ServiceClient * ptrclient;
 
 string Transport(string reqcode, int reqindex){
-    env_sensor::DataCallBack srv;
+    ui_oled::DataCallBack srv;
     srv.request.reqcd = reqcode;
      if (vecClnt[reqindex].call(srv))
     {
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "ui");
   ros::NodeHandle n;
   ros::Rate loop_rate(100);
-  ros::ServiceClient client = n.serviceClient<env_sensor::DataCallBack>("ivkcast");
+  ros::ServiceClient client = n.serviceClient<ui_oled::DataCallBack>("ivkcast");
   ptrclient = &client;
   if(wiringPiSetup() < 0){
       ROS_INFO("wiringPi failed");
