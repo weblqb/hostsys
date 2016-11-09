@@ -11,31 +11,37 @@ using namespace std;
 
 BMP180 *ptrSensor;
 
-bool chatterCallback(ui_oled::DataCallBack::Request  &req,
+bool temperatureBoardCallback(ui_oled::DataCallBack::Request  &req,
          ui_oled::DataCallBack::Response &res)
 {
     ROS_INFO("Got a call: [%s]", req.reqcd.c_str());
+	stringstream ss;
+	ss <<ptrSensor->read_temperature()<<" 'C" ;
+	res.backdata=  ss.str();
+	ROS_INFO("sent requst: %s", ss.str().c_str());
+	return true;
+}
 
-    if(req.reqcd== string("temperatureBoard")){
-        stringstream ss;
-        ss <<ptrSensor->read_temperature()<<" 'C" ;
-        res.backdata=  ss.str();
-        ROS_INFO("sent requst: %s", ss.str().c_str());
-        return true;
-    }else if(req.reqcd== string("Altitude")){
+bool AltitudeCallback(ui_oled::DataCallBack::Request  &req,
+         ui_oled::DataCallBack::Response &res)
+{
+    ROS_INFO("Got a call: [%s]", req.reqcd.c_str());
         stringstream ss;
         ss << ptrSensor->read_altitude() <<" meter";
         res.backdata=  ss.str();
         ROS_INFO("sent requst: %s", ss.str().c_str());
         return true;
-    }else if(req.reqcd == string("Pressure")){
+}
+
+bool PressureCallback(ui_oled::DataCallBack::Request  &req,
+         ui_oled::DataCallBack::Response &res)
+{
+    ROS_INFO("Got a call: [%s]", req.reqcd.c_str());
         stringstream ss;
         ss << ptrSensor->read_pressure()<<" Pa";
         res.backdata=  ss.str();
         ROS_INFO("sent requst: %s", ss.str().c_str());
         return true;
-    }
-  return false;
 }
 
 
@@ -51,7 +57,9 @@ int main(int argc, char **argv)
   ptrSensor = &sensor;
   cout << sensor.read_altitude() <<endl;
   cout << sensor.read_temperature() <<endl;
-  ros::ServiceServer service = n.advertiseService("ivkcast", chatterCallback);
+  ros::ServiceServer service1 = n.advertiseService("temperatureBoard", temperatureBoardCallback);
+  ros::ServiceServer service2 = n.advertiseService("Altitude", AltitudeCallback);
+  ros::ServiceServer service3 = n.advertiseService("Pressure", PressureCallback);
   ROS_INFO("Ready to response.");
   ros::spin();
   return 0;

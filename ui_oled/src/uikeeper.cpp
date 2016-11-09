@@ -1,4 +1,5 @@
 #include "uikeeper.h"
+#include "ui_oled/DataCallBack.h"
 #include <iostream>
 
 using namespace std;
@@ -185,8 +186,9 @@ void UIkeeper::ConstructUI(ifstream & file, vector<ros::ServiceClient> & vecClnt
             file >> indexDiveIn ;
             if(title.length()>5) title= title.substr(0,5); //the lenght of titles can not be longer than 5.
 			if (indexDiveIn == -1){
-				vecClnt.push_back(n.n.serviceClient<ui_oled::DataCallBack>(ReqCode.c_str()));
-				mpUIdt->AddSection(indexChain, title, Abstract, ReqCode, vecClnt.length()-1, indexDiveIn);
+				//cout<<endl <<ReqCode.substr(0, ReqCode.length()-1)<<endl<<ReqCode.length()<< endl;
+				vecClnt.push_back(n.serviceClient<ui_oled::DataCallBack>(ReqCode));
+				mpUIdt->AddSection(indexChain, title, Abstract, ReqCode, vecClnt.size()-1, indexDiveIn);
 			}
 			else{
 				mpUIdt->AddSection(indexChain, title, Abstract, ReqCode, -1, indexDiveIn);

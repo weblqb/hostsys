@@ -23,6 +23,7 @@ ros::ServiceClient * ptrclient;
 string Transport(string reqcode, int reqindex){
     ui_oled::DataCallBack srv;
     srv.request.reqcd = reqcode;
+    ROS_INFO("send: %d - %s", reqindex,reqcode.c_str());
      if (vecClnt[reqindex].call(srv))
     {
          ROS_INFO("receive: %s", srv.response.backdata.c_str());
@@ -51,7 +52,7 @@ int main(int argc, char **argv)
       cout<<"file failed"<<endl;
       return 1;
   }
-  UIkeeper *UIK = new UIkeeper(Transport, ifs, vecClnt, ros::NodeHandle);
+  UIkeeper *UIK = new UIkeeper(Transport, ifs, vecClnt, n);
   KeyScaner KSC;
   ROS_INFO("init done.");
   while (ros::ok())
