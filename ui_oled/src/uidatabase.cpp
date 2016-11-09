@@ -37,7 +37,7 @@ void UIdatabase::NewChain()
     mChNum++;
 }
 
-void UIdatabase::AddSection(int indexChain, string title, string Abstract, string ReqCode, int indexDiveIn)
+void UIdatabase::AddSection(int indexChain, string title, string Abstract, string ReqCode, int ReqIndex, int indexDiveIn)
 {
     Section * tmpSec;
     if(mChains[indexChain]->pHeadSection == NULL){
@@ -50,6 +50,7 @@ void UIdatabase::AddSection(int indexChain, string title, string Abstract, strin
         tmpSec->strReqCode = ReqCode;
         tmpSec->dChainNext = indexDiveIn;
         tmpSec->dChain = indexChain;
+		tmpSec->dReqIndex = ReqIndex;
         if(indexDiveIn>=0) mChains[indexDiveIn]->pFaterSection = tmpSec;
     }else{
         tmpSec = new Section;
@@ -62,6 +63,7 @@ void UIdatabase::AddSection(int indexChain, string title, string Abstract, strin
         tmpSec->strReqCode = ReqCode;
         tmpSec->dChainNext = indexDiveIn;
         tmpSec->dChain = indexChain;
+		tmpSec->dReqIndex = ReqIndex;
         if(indexDiveIn>=0) mChains[indexDiveIn]->pFaterSection = tmpSec;
     }
     (mChains[indexChain]->len)++;
@@ -101,6 +103,11 @@ string UIdatabase::getReqCode(Section *Sec)
 {
     return Sec->strReqCode;
 }
+
+int getReqIndex(){
+	return Sec->dReqIndex;
+}
+
 
 int UIdatabase::getChain(Section *Sec)
 {

@@ -9,7 +9,7 @@
 #include "dispdriver.h"
 #include <vector>
 
-typedef string (*TrFunc)(string reqcode);
+typedef string (*TrFunc)(string reqcode, int reqindex);
 
 typedef void (*reccb)(const std_msgs::String::ConstPtr& msg);
 
@@ -28,14 +28,14 @@ private:
 
 public:
     UIkeeper(TrFunc pf);
-    UIkeeper(TrFunc pf, ifstream & file);
+	UIkeeper(TrFunc pf, ifstream & file, vector<ros::ServiceClient> & vecClnt, ros::NodeHandle & n);
     ~UIkeeper();
     void TurnNext();
     void TurnPrevious();
     void DiveIn();
     void Back();
     void RefreshAbstracts();
-    void ConstructUI(ifstream &);
+	void ConstructUI(ifstream & file, vector<ros::ServiceClient> & vecClnt, ros::NodeHandle & n);
 };
 
 #endif // UIKEEPER_H

@@ -60,7 +60,7 @@ void UIkeeper::Refresh()
     if(mCurrentSection->dChainNext<0){
         mpDRI->SSD1306_string(0, 18+16, "[", 12, 1);
         mpDRI->SSD1306_string(122, 18+16, "]", 12, 1);
-        string strTmp = mReqFunc(mCurrentSection->strReqCode);
+		string strTmp = mReqFunc(mCurrentSection->strReqCode, mCurrentSection->dReqIndex);
         if(strTmp.length()>19) strTmp = strTmp.substr(0,19);
         mpDRI->SSD1306_string(64-strTmp.length()*3, 18+16, strTmp.c_str(), 12, 1);
     }else{
@@ -110,13 +110,13 @@ UIkeeper::UIkeeper(TrFunc pf)
     isConstra=false;
 }
 
-UIkeeper::UIkeeper(TrFunc pf, ifstream & file)
+UIkeeper::UIkeeper(TrFunc pf, ifstream & file, vector<ros::ServiceClient> & vecClnt, ros::NodeHandle & n)
 {
     mpUIdt = new UIdatabase();
     mpDRI = new DispDriver();
     mReqFunc = pf;
     isConstra = false;
-    ConstructUI(file);
+    ConstructUI(file, vecClnt, n);
 }
 
 UIkeeper::~UIkeeper()
@@ -159,7 +159,7 @@ void UIkeeper::RefreshAbstracts()
 
 }
 
-void UIkeeper::ConstructUI(ifstream & file)
+void UIkeeper::ConstructUI(ifstream & file, vector<ros::ServiceClient> & vecClnt, ros::NodeHandle & n)
 {
     int dChainNum,
         arrSecNum[10];
@@ -184,7 +184,14 @@ void UIkeeper::ConstructUI(ifstream & file)
             getline(file, ReqCode);
             file >> indexDiveIn ;
             if(title.length()>5) title= title.substr(0,5); //the lenght of titles can not be longer than 5.
-            mpUIdt->AddSection(indexChain, title, Abstract, ReqCode, indexDiveIn);
+			if (indexDiveIn == -1){
+				vecClnt.push_back(n.n.serviceClient<env_sensor::DataCallBack>(ReqCode.c_str()));
+				mpUIdt->AddSection(indexChain, title, Abstract, ReqCode, vecClnt.length()-1, indexDiveIn);
+			}
+			else{
+				mpUIdt->AddSection(indexChain, title, Abstract, ReqCode, -1, indexDiveIn);
+			}
+			
         }
     }
     mCurrentSection = mpUIdt->getChainhead(0);

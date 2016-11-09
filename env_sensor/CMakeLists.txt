@@ -7,7 +7,6 @@ project(env_sensor)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
-  message_generation
 )
 find_package(WiringPi REQUIRED)
 file(GLOB SOURCES "src/*.cpp")
@@ -53,11 +52,11 @@ file(GLOB SOURCES "src/*.cpp")
 # )
 
 ## Generate services in the 'srv' folder
- add_service_files(
-   FILES
-   DataCallBack.srv
+# add_service_files(
+#   FILES
+#   
 #   Service2.srv
- )
+# )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -143,6 +142,13 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
+add_executable(envssr ${SOURCES} )
+target_link_libraries(envssr
+  ${catkin_LIBRARIES}
+  ${WIRINGPI_LIBRARIES}
+ )
+add_dependencies(envssr env_sensor_generate_messages_cpp)
+
 #############
 ## Install ##
 #############
@@ -178,12 +184,6 @@ include_directories(
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
 
-add_executable(envssr ${SOURCES} )
-target_link_libraries(envssr
-  ${catkin_LIBRARIES}
-  ${WIRINGPI_LIBRARIES}
- )
-add_dependencies(envssr env_sensor_generate_messages_cpp)
 
 #############
 ## Testing ##

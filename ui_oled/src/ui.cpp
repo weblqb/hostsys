@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <wiringPi.h>
+#include <vector>
 #include "uikeeper.h"
 #include "keyscaner.h"
 #include "env_sensor/DataCallBack.h"
@@ -16,12 +17,13 @@ using namespace std;
 
 string uiofile("/home/pi/catkin_ws/src/ui_oled/src/UIdata.oui");
 ifstream ifs;
+vector<ros::ServiceClient> vecClnt;
 ros::ServiceClient * ptrclient;
 
-string Transport(string reqcode){
+string Transport(string reqcode, int reqindex){
     env_sensor::DataCallBack srv;
     srv.request.reqcd = reqcode;
-     if (ptrclient->call(srv))
+     if (vecClnt[reqindex].call(srv))
     {
          ROS_INFO("receive: %s", srv.response.backdata.c_str());
          return srv.response.backdata;
@@ -49,7 +51,7 @@ int main(int argc, char **argv)
       cout<<"file failed"<<endl;
       return 1;
   }
-  UIkeeper *UIK = new UIkeeper(Transport,ifs);
+  UIkeeper *UIK = new UIkeeper(Transport, ifs, vecClnt, ros::NodeHandle);
   KeyScaner KSC;
   ROS_INFO("init done.");
   while (ros::ok())
