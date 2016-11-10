@@ -155,15 +155,136 @@ void UIkeeper::Back()
     Refresh();
 }
 
-void UIkeeper::RefreshAbstracts()
+void UIkeeper::Select()
 {
-    if(mpUIdt->getNextChain(mCurrentSection)==-1){
+    if(mpUIdt->getNextChain(mCurrentSection)<0){
+        mpDRI->SSD1306_clear();
+        //print titles
+        mpDRI->SSD1306_string(0, 2, "<", 12, 1);
+        mpDRI->SSD1306_string(6, 2, (mCurrentSection->pSecPrevious->strTitle).c_str(), 12, 1);
+        int dttoffset;
+        switch((mCurrentSection->strTitle).length()){
+        case 1:
+        dttoffset=61;
+        break;
+        case 2:
+        dttoffset=58;
+        break;
+        case 3:
+        dttoffset=55;
+        break;
+        case 4:
+        dttoffset=52;
+        break;
+        case 5:
+        dttoffset=49;
+        break;
+        default:
+        dttoffset=49;
+        break;
+        }
+        mpDRI->SSD1306_string(dttoffset, 2, (mCurrentSection->strTitle).c_str(), 12, 0);
+
+        switch((mCurrentSection->pSecNext->strTitle).length()){
+        case 1:
+        dttoffset=116;
+        break;
+        case 2:
+        dttoffset=110;
+        break;
+        case 3:
+        dttoffset=104;
+        break;
+        case 4:
+        dttoffset=98;
+        break;
+        case 5:
+        dttoffset=92;
+        break;
+        default:
+        dttoffset=92;
+        break;
+        }
+        mpDRI->SSD1306_string(dttoffset, 2, (mCurrentSection->pSecNext->strTitle).c_str(), 12, 1);
+        mpDRI->SSD1306_string(122, 2, ">", 12, 1);
+
+        //print abstracts
         mpDRI->SSD1306_string(0, 18+16, "[", 12, 1);
         mpDRI->SSD1306_string(122, 18+16, "]", 12, 1);
-        string strTmp = mReqFunc(mCurrentSection->strReqCode, mCurrentSection->dReqIndex);
+        string strTmp = mReqFunc(mCurrentSection->strReqCode+ string("CK"), mCurrentSection->dReqIndex);
         if(strTmp.length()>19) strTmp = strTmp.substr(0,19);
         mpDRI->SSD1306_string(64-strTmp.length()*3, 18+16, strTmp.c_str(), 12, 1);
+        mpDRI->SSD1306_display();
+    }else{
+        if(mpUIdt->getFatherSec(mpUIdt->getChain(mCurrentSection))!=NULL)
+        mCurrentSection = mpUIdt->getFatherSec(mpUIdt->getChain(mCurrentSection));
+        Refresh();
     }
+}
+
+void UIkeeper::RefreshAbstracts()
+{
+    if(mpUIdt->getNextChain(mCurrentSection)<0){
+        mpDRI->SSD1306_clear();
+	    //print titles
+	    mpDRI->SSD1306_string(0, 2, "<", 12, 1);
+	    mpDRI->SSD1306_string(6, 2, (mCurrentSection->pSecPrevious->strTitle).c_str(), 12, 1);
+	    int dttoffset;
+	    switch((mCurrentSection->strTitle).length()){
+	    case 1:
+		dttoffset=61;
+		break;
+	    case 2:
+		dttoffset=58;
+		break;
+	    case 3:
+		dttoffset=55;
+		break;
+	    case 4:
+		dttoffset=52;
+		break;
+	    case 5:
+		dttoffset=49;
+		break;
+	    default:
+		dttoffset=49;
+		break;
+	    }
+	    mpDRI->SSD1306_string(dttoffset, 2, (mCurrentSection->strTitle).c_str(), 12, 0);
+
+	    switch((mCurrentSection->pSecNext->strTitle).length()){
+	    case 1:
+		dttoffset=116;
+		break;
+	    case 2:
+		dttoffset=110;
+		break;
+	    case 3:
+		dttoffset=104;
+		break;
+	    case 4:
+		dttoffset=98;
+		break;
+	    case 5:
+		dttoffset=92;
+		break;
+	    default:
+		dttoffset=92;
+		break;
+	    }
+	    mpDRI->SSD1306_string(dttoffset, 2, (mCurrentSection->pSecNext->strTitle).c_str(), 12, 1);
+	    mpDRI->SSD1306_string(122, 2, ">", 12, 1);
+
+	    //print abstracts
+		mpDRI->SSD1306_string(0, 18+16, "[", 12, 1);
+		mpDRI->SSD1306_string(122, 18+16, "]", 12, 1);
+        string strTmp = mReqFunc(mCurrentSection->strReqCode, mCurrentSection->dReqIndex);
+		if(strTmp.length()>19) strTmp = strTmp.substr(0,19);
+		mpDRI->SSD1306_string(64-strTmp.length()*3, 18+16, strTmp.c_str(), 12, 1);
+	    
+	    mpDRI->SSD1306_display();
+	}
+    
 }
 
 void UIkeeper::ConstructUI(ifstream & file, vector<ros::ServiceClient> & vecClnt, ros::NodeHandle & n)

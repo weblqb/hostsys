@@ -9,10 +9,13 @@
 #define LEFT  EXTEND_BASE + 3
 #define LED   EXTEND_BASE + 4
 #define BEEP  EXTEND_BASE + 7
+#define KEYCENTER 28
 
 KeyScaner::KeyScaner()
 {
     //wiringPiSetup();
+    pinMode (KEYCENTER,INPUT);
+    pullUpDnControl(KEYCENTER, PUD_UP);
     pcf8574Setup(EXTEND_BASE,PCF8574_Address);
     pinMode(RIGHT,INPUT);
     pinMode(DOWM,INPUT);
@@ -28,7 +31,8 @@ int KeyScaner::ScanKeys()
 {
     int tmp = 0;
     if((digitalRead(UP) == LOW) || (digitalRead(DOWM) == LOW) ||
-        (digitalRead(LEFT) == LOW) || (digitalRead(RIGHT) == LOW))
+        (digitalRead(LEFT) == LOW) || (digitalRead(RIGHT) == LOW)||
+        (digitalRead(KEYCENTER) == 0))
     {
         digitalWrite(LED,LOW);
         //digitalWrite(BEEP,LOW);
@@ -40,8 +44,11 @@ int KeyScaner::ScanKeys()
             tmp = KEYU;
         else if(digitalRead(RIGHT) == LOW)
             tmp = KEYL;
+        else if(digitalRead(KEYCENTER) == 0)
+            tmp = KEYC;
         while((digitalRead(UP) == LOW) || (digitalRead(DOWM) == LOW) ||
-            (digitalRead(LEFT) == LOW) || (digitalRead(RIGHT) == LOW))
+            (digitalRead(LEFT) == LOW) || (digitalRead(RIGHT) == LOW)||
+              (digitalRead(KEYCENTER) == 0))
         {
             delay(10);
         }

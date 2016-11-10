@@ -34,6 +34,7 @@ public:
     void TurnPrevious();
     void DiveIn();
     void Back();
+    void Select();
     void RefreshAbstracts();
 	void ConstructUI(ifstream & file, vector<ros::ServiceClient> & vecClnt, ros::NodeHandle & n);
 };

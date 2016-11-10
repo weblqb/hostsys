@@ -1,9 +1,10 @@
+4
+3
 3
 2
-3
-2
+7
 0
-STATE
+EVRMT
 Conditions
 0
 1
@@ -12,6 +13,11 @@ BKP
 Back up
 0
 2
+0
+SYSTM
+system
+0
+3
 1
 TEMP
 Temperature
@@ -36,4 +42,39 @@ TimBkp
 REMN
 remain of HDD
 REMHDD
+-1
+3
+CPUTP
+CPU Temperature
+SystemCPUT
+-1
+3
+CPUFQ
+CPU Clock
+SystemCPUF
+-1
+3
+CPULD
+CPU Load
+SystemCPUU
+-1
+3
+GPUTP
+GPU Temperature
+SystemGPUT
+-1
+3
+RAMUS
+RAM Usage
+SystemRAMU
+-1
+3
+SHTDN
+Shut Down
+SystemSD
+-1
+3
+RBOOT
+Reboot
+SystemRB
 -1

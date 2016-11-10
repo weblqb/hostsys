@@ -7,6 +7,7 @@
 #define KEYD 4
 #define KEYC 5
 
+typedef void (*CK_int)();
 
 class KeyScaner
 {

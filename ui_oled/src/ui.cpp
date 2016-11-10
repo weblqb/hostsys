@@ -18,7 +18,7 @@ using namespace std;
 string uiofile("/home/pi/catkin_ws/src/ui_oled/src/UIdata.oui");
 ifstream ifs;
 vector<ros::ServiceClient> vecClnt;
-ros::ServiceClient * ptrclient;
+//ros::ServiceClient * ptrclient;
 
 string Transport(string reqcode, int reqindex){
     ui_oled::DataCallBack srv;
@@ -29,7 +29,7 @@ string Transport(string reqcode, int reqindex){
          ROS_INFO("receive: %s", srv.response.backdata.c_str());
          return srv.response.backdata;
     }else{
-         ROS_INFO("Failed to call service add_two_ints");
+         ROS_INFO("Failed to call service");
          return string("-No Data-");
     }
 
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
   ros::NodeHandle n;
   ros::Rate loop_rate(100);
   //ros::ServiceClient client = n.serviceClient<ui_oled::DataCallBack>("ivkcast");
-  ptrclient = &client;
+  //ptrclient = &client;
   if(wiringPiSetup() < 0){
       ROS_INFO("wiringPi failed");
       return 1;
@@ -72,15 +72,14 @@ int main(int argc, char **argv)
             UIK->TurnNext();
           break;
       case KEYC:
-
+            UIK->Select();
           break;
       }
-
     if(cnt>=50){
         cnt=0;
         UIK->RefreshAbstracts();
     }else{
-        cnt++
+        cnt++;
     }
     ros::spinOnce();
     loop_rate.sleep();
