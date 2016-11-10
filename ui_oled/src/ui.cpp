@@ -41,7 +41,7 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "ui");
   ros::NodeHandle n;
   ros::Rate loop_rate(100);
-  ros::ServiceClient client = n.serviceClient<ui_oled::DataCallBack>("ivkcast");
+  //ros::ServiceClient client = n.serviceClient<ui_oled::DataCallBack>("ivkcast");
   ptrclient = &client;
   if(wiringPiSetup() < 0){
       ROS_INFO("wiringPi failed");
@@ -55,6 +55,7 @@ int main(int argc, char **argv)
   UIkeeper *UIK = new UIkeeper(Transport, ifs, vecClnt, n);
   KeyScaner KSC;
   ROS_INFO("init done.");
+  int cnt=0;
   while (ros::ok())
   {
       switch(KSC.ScanKeys()){
@@ -75,7 +76,12 @@ int main(int argc, char **argv)
           break;
       }
 
-
+    if(cnt>=50){
+        cnt=0;
+        UIK->RefreshAbstracts();
+    }else{
+        cnt++
+    }
     ros::spinOnce();
     loop_rate.sleep();
   }

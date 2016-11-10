@@ -157,7 +157,13 @@ void UIkeeper::Back()
 
 void UIkeeper::RefreshAbstracts()
 {
-
+    if(mpUIdt->getNextChain(mCurrentSection)==-1){
+        mpDRI->SSD1306_string(0, 18+16, "[", 12, 1);
+        mpDRI->SSD1306_string(122, 18+16, "]", 12, 1);
+        string strTmp = mReqFunc(mCurrentSection->strReqCode, mCurrentSection->dReqIndex);
+        if(strTmp.length()>19) strTmp = strTmp.substr(0,19);
+        mpDRI->SSD1306_string(64-strTmp.length()*3, 18+16, strTmp.c_str(), 12, 1);
+    }
 }
 
 void UIkeeper::ConstructUI(ifstream & file, vector<ros::ServiceClient> & vecClnt, ros::NodeHandle & n)
